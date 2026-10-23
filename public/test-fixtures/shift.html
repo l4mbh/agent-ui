@@ -1,0 +1,7 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>shift</title>
+<style>body { font: 14px/1.4 system-ui, sans-serif; margin: 0; } #content { height: 600px; background: #cde; }</style></head>
+<body>
+  <div id="content">Content that gets pushed down</div>
+  <script>setTimeout(() => { const d = document.createElement('div'); d.style.height = '200px'; d.textContent = 'late banner'; document.body.prepend(d) }, 300)</script>
+</body></html>

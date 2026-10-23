@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "action-bar",
+  "title": "ActionBar",
+  "description": "Wrapping action row, primary first, secondary folds into More actions (R5).",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "@agent-ui/button",
+    "@agent-ui/dropdown-menu",
+    "@agent-ui/i18n",
+    "@agent-ui/text"
+  ],
+  "files": [
+    {
+      "path": "registry/patterns/action-bar.tsx",
+      "content": "import { Ellipsis, LoaderCircle } from 'lucide-react'\nimport { useLayoutEffect, useRef, useState } from 'react'\nimport { useT } from '@/registry/i18n/i18n'\nimport { Text } from '@/registry/patterns/text'\nimport { Button, IconButton } from '@/registry/ui/button'\nimport { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/registry/ui/dropdown-menu'\n\nexport type Action = { id: string; label: string; onSelect: () => void; loading?: boolean; disabled?: boolean; destructive?: boolean; testId?: string }\n\n// R5: wraps instead of overflowing; the one primary action stays first; on narrow screens the secondary\n// actions fold into \"More actions\" so the primary never ends up on its own line far below.\nexport function ActionBar({ primary, secondary = [], foldBelow = 480 }: { primary?: Action; secondary?: Action[]; foldBelow?: number }) {\n  const t = useT()\n  const ref = useRef<HTMLDivElement>(null)\n  const [narrow, setNarrow] = useState(false)\n\n  useLayoutEffect(() => {\n    const el = ref.current\n    if (!el) return\n    const ro = new ResizeObserver(([entry]) => setNarrow(entry.contentRect.width < foldBelow))\n    ro.observe(el)\n    return () => ro.disconnect()\n  }, [foldBelow])\n\n  const fold = narrow && secondary.length > 1\n  return (\n    <div ref={ref} className=\"flex w-full min-w-0 flex-wrap items-center gap-2\">\n      {primary && (\n        <Button data-testid={primary.testId} variant=\"primary\" loading={primary.loading} disabled={primary.disabled} onClick={primary.onSelect}>{primary.label}</Button>\n      )}\n      {!fold && secondary.map((a) => (\n        <Button key={a.id} data-testid={a.testId} variant=\"outline\" className={a.destructive ? 'text-destructive' : undefined} loading={a.loading} disabled={a.disabled} onClick={a.onSelect}>{a.label}</Button>\n      ))}\n      {fold && (\n        <DropdownMenu>\n          <DropdownMenuTrigger asChild><IconButton label={t('agentui.moreActions')} variant=\"outline\"><Ellipsis /></IconButton></DropdownMenuTrigger>\n          <DropdownMenuContent align=\"end\">\n            {secondary.map((a) => (\n              <DropdownMenuItem key={a.id} data-testid={a.testId} disabled={a.disabled || a.loading} destructive={a.destructive} onSelect={a.onSelect}>\n                {/* Busy cue + disabled: a folded action in flight must not be selectable again (double submit). */}\n                {a.loading && <LoaderCircle className=\"size-4 shrink-0 animate-spin\" aria-hidden />}\n                <Text overflow=\"truncate\">{a.label}</Text>\n              </DropdownMenuItem>\n            ))}\n          </DropdownMenuContent>\n        </DropdownMenu>\n      )}\n    </div>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

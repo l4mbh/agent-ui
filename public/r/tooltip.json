@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip",
+  "title": "Tooltip",
+  "description": "Bounded, wrapping tooltip; closes on Esc.",
+  "dependencies": [
+    "radix-ui"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/tooltip.tsx",
+      "content": "import { Tooltip as T } from 'radix-ui'\nimport type { ReactElement, ReactNode } from 'react'\n\nexport function TooltipProvider({ children }: { children: ReactNode }) {\n  return <T.Provider delayDuration={300}>{children}</T.Provider>\n}\n\n/** Closes on Esc and pointer leave (R15). Long tooltip text wraps inside a bounded width. */\nexport function Tooltip({ content, children, wrapTrigger = false }: { content: ReactNode; children: ReactElement; wrapTrigger?: boolean }) {\n  return (\n    <T.Provider delayDuration={300}>\n    <T.Root>\n      {/* A disabled button gets no hover/focus, so the tooltip hangs on a wrapping span. */}\n      <T.Trigger asChild>{wrapTrigger ? <span tabIndex={0} className=\"inline-flex\">{children}</span> : children}</T.Trigger>\n      <T.Portal>\n        <T.Content sideOffset={6} collisionPadding={8} className=\"z-50 max-w-72 rounded-md bg-foreground px-2 py-1 text-xs text-background [overflow-wrap:anywhere] animate-in fade-in-0\">\n          {content}\n        </T.Content>\n      </T.Portal>\n    </T.Root>\n    </T.Provider>\n  )\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "popover",
+  "title": "Popover",
+  "description": "Popover with a labelled × that closes it and returns focus (R15).",
+  "dependencies": [
+    "radix-ui",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "@agent-ui/utils",
+    "@agent-ui/text",
+    "@agent-ui/button",
+    "@agent-ui/i18n"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/popover.tsx",
+      "content": "import { X } from 'lucide-react'\nimport { Popover as P } from 'radix-ui'\nimport type { ReactNode } from 'react'\nimport { useT } from '@/registry/i18n/i18n'\nimport { Text } from '@/registry/patterns/text'\nimport { IconButton } from '@/registry/ui/button'\n\nexport const Popover = P.Root\nexport const PopoverTrigger = P.Trigger\n\n/** R15: focus lands on the popover, not on ×, so the × tooltip does not open and swallow the first Esc.\n *  × (labelled), Esc and click outside all close it; Radix returns focus to the trigger. */\nexport function PopoverContent({ title, children }: { title: string; children: ReactNode }) {\n  const t = useT()\n  return (\n    <P.Portal>\n      <P.Content role=\"dialog\" onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).focus() }} aria-label={title} sideOffset={4} collisionPadding={8} className=\"z-50 w-[min(24rem,calc(100vw-1rem))] rounded-md border bg-popover p-3 text-popover-foreground shadow-md\">\n        <div className=\"mb-2 flex items-center justify-between gap-2\">\n          <Text as=\"h3\" overflow=\"truncate\" className=\"text-sm font-semibold\">{title}</Text>\n          <P.Close asChild><IconButton label={t('agentui.close')} variant=\"ghost\"><X /></IconButton></P.Close>\n        </div>\n        {children}\n      </P.Content>\n    </P.Portal>\n  )\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

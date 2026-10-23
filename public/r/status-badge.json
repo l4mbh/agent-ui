@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "status-badge",
+  "title": "StatusBadge",
+  "description": "Fixed-width status badge across states and languages (R3).",
+  "registryDependencies": [
+    "@agent-ui/utils",
+    "@agent-ui/i18n"
+  ],
+  "files": [
+    {
+      "path": "registry/patterns/status-badge.tsx",
+      "content": "import { useT, useTAll } from '@/registry/i18n/i18n'\nimport { cn } from '@/registry/lib/utils'\n\nexport type Tone = 'neutral' | 'info' | 'warning' | 'success' | 'destructive'\n/** `label` is a message key. One set per kind of status (meeting status, reply, …). */\nexport type StatusSet<S extends string> = Record<S, { label: string; tone: Tone }>\n\nconst tones: Record<Tone, string> = {\n  neutral: 'bg-muted text-muted-foreground',\n  info: 'bg-info/12 text-info',\n  warning: 'bg-warning/15 text-warning',\n  success: 'bg-success/12 text-success',\n  destructive: 'bg-destructive/12 text-[color-mix(in_oklch,var(--destructive),black_25%)] dark:text-destructive',\n}\n\n// R3: every label of the set, in every language, sits invisibly in the same grid cell, so the badge is always\n// as wide as the longest one — no measuring in JS, no jump when the status or the language changes.\nexport function StatusBadge<S extends string>({ status, states }: { status: S; states: StatusSet<S> }) {\n  const t = useT()\n  const tAll = useTAll()\n  const sizers = (Object.values(states) as { label: string }[]).flatMap((s) => tAll(s.label))\n  return (\n    <span data-slot=\"status-badge\" className={cn('inline-grid shrink-0 place-items-center whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-medium', tones[states[status].tone])}>\n      {sizers.map((label, i) => (\n        <span key={i} aria-hidden className=\"invisible [grid-area:1/1]\">{label}</span>\n      ))}\n      <span className=\"[grid-area:1/1]\">{t(states[status].label)}</span>\n    </span>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

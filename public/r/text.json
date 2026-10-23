@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text",
+  "title": "Text",
+  "description": "Text that must choose truncate, clamp or wrap (R4), and Nums (R6).",
+  "registryDependencies": [
+    "@agent-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/patterns/text.tsx",
+      "content": "import { useLayoutEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react'\nimport { cn } from '@/registry/lib/utils'\n\nexport type Overflow = 'truncate' | 'wrap' | { clamp: number }\ntype Tag = 'span' | 'p' | 'div' | 'h1' | 'h2' | 'h3' | 'dt' | 'dd'\n\nexport type TextProps = Omit<HTMLAttributes<HTMLElement>, 'children'> & {\n  /** R4: every piece of text in a constrained box must say what happens when it does not fit. */\n  overflow: Overflow\n  as?: Tag\n  children: ReactNode\n}\n\n/**\n * truncate/clamp need a box: the default `span` truncates inline-block and stays on its line inside a sentence.\n * Pass `title` when children are not a plain string (the R4 check flags cut text without a title).\n */\nexport function Text({ overflow, as: As = 'span', title, className, style, children, ...rest }: TextProps) {\n  const ref = useRef<HTMLElement>(null)\n  const [clipped, setClipped] = useState(false)\n\n  // The tooltip appears only while the text is actually cut, so short text does not get a redundant title.\n  useLayoutEffect(() => {\n    const el = ref.current\n    if (!el || overflow === 'wrap') return\n    const check = () => setClipped(el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1)\n    check()\n    const ro = new ResizeObserver(check)\n    ro.observe(el)\n    return () => ro.disconnect()\n  }, [overflow, children])\n\n  const full = title ?? (typeof children === 'string' || typeof children === 'number' ? String(children) : undefined)\n  const clamp = typeof overflow === 'object' ? overflow.clamp : undefined\n\n  return (\n    <As\n      ref={ref as never}\n      title={clipped ? full : undefined}\n      style={clamp ? { ...style, WebkitLineClamp: clamp } : style}\n      className={cn(\n        'min-w-0',\n        overflow === 'truncate' && (As === 'span' ? 'inline-block max-w-full align-bottom truncate' : 'block truncate'),\n        clamp && 'overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical]',\n        overflow === 'wrap' && '[overflow-wrap:anywhere]',\n        className,\n      )}\n      {...rest}\n    >\n      {children}\n    </As>\n  )\n}\n\n/** R6: digits that line up — times, dates, counts. */\nexport function Nums({ className, children }: { className?: string; children: ReactNode }) {\n  return <span className={cn('tabular-nums', className)}>{children}</span>\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "title": "Skeleton",
+  "description": "Pulsing placeholder block.",
+  "registryDependencies": [
+    "@agent-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/skeleton.tsx",
+      "content": "import { cn } from '@/registry/lib/utils'\n\nexport function Skeleton({ className }: { className?: string }) {\n  return <div aria-hidden className={cn('animate-pulse rounded-md bg-muted', className)} />\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

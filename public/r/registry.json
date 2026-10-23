@@ -1,0 +1,554 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "agent-ui",
+  "homepage": "https://github.com/l4mbh/agent-ui",
+  "items": [
+    {
+      "name": "base",
+      "type": "registry:base",
+      "title": "agent-ui base",
+      "description": "Neutral theme, status tones, Inter + system Chinese fonts.",
+      "dependencies": [
+        "tw-animate-css",
+        "@fontsource-variable/inter",
+        "class-variance-authority",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@agent-ui/utils"
+      ],
+      "css": {
+        "@import \"tw-animate-css\"": {},
+        "@import \"shadcn/tailwind.css\"": {},
+        "@import \"@fontsource-variable/inter\"": {},
+        "@layer base": {
+          "*": {
+            "@apply border-border outline-ring/50": {}
+          },
+          "body": {
+            "@apply bg-background text-foreground font-sans antialiased": {}
+          }
+        }
+      },
+      "cssVars": {
+        "theme": {
+          "font-heading": "var(--font-sans)",
+          "color-sidebar-ring": "var(--sidebar-ring)",
+          "color-sidebar-border": "var(--sidebar-border)",
+          "color-sidebar-accent-foreground": "var(--sidebar-accent-foreground)",
+          "color-sidebar-accent": "var(--sidebar-accent)",
+          "color-sidebar-primary-foreground": "var(--sidebar-primary-foreground)",
+          "color-sidebar-primary": "var(--sidebar-primary)",
+          "color-sidebar-foreground": "var(--sidebar-foreground)",
+          "color-sidebar": "var(--sidebar)",
+          "color-chart-5": "var(--chart-5)",
+          "color-chart-4": "var(--chart-4)",
+          "color-chart-3": "var(--chart-3)",
+          "color-chart-2": "var(--chart-2)",
+          "color-chart-1": "var(--chart-1)",
+          "color-ring": "var(--ring)",
+          "color-input": "var(--input)",
+          "color-border": "var(--border)",
+          "color-destructive": "var(--destructive)",
+          "color-accent-foreground": "var(--accent-foreground)",
+          "color-accent": "var(--accent)",
+          "color-muted-foreground": "var(--muted-foreground)",
+          "color-muted": "var(--muted)",
+          "color-secondary-foreground": "var(--secondary-foreground)",
+          "color-secondary": "var(--secondary)",
+          "color-primary-foreground": "var(--primary-foreground)",
+          "color-primary": "var(--primary)",
+          "color-popover-foreground": "var(--popover-foreground)",
+          "color-popover": "var(--popover)",
+          "color-card-foreground": "var(--card-foreground)",
+          "color-card": "var(--card)",
+          "color-foreground": "var(--foreground)",
+          "color-background": "var(--background)",
+          "radius-sm": "calc(var(--radius) * 0.6)",
+          "radius-md": "calc(var(--radius) * 0.8)",
+          "radius-lg": "var(--radius)",
+          "radius-xl": "calc(var(--radius) * 1.4)",
+          "radius-2xl": "calc(var(--radius) * 1.8)",
+          "radius-3xl": "calc(var(--radius) * 2.2)",
+          "radius-4xl": "calc(var(--radius) * 2.6)",
+          "color-info": "var(--info)",
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "font-sans": "\"Inter Variable\", \"PingFang TC\", \"Microsoft JhengHei\", \"Noto Sans TC\", ui-sans-serif, system-ui, sans-serif"
+        },
+        "light": {
+          "background": "oklch(1 0 0)",
+          "foreground": "oklch(0.145 0 0)",
+          "card": "oklch(1 0 0)",
+          "card-foreground": "oklch(0.145 0 0)",
+          "popover": "oklch(1 0 0)",
+          "popover-foreground": "oklch(0.145 0 0)",
+          "primary": "oklch(0.205 0 0)",
+          "primary-foreground": "oklch(0.985 0 0)",
+          "secondary": "oklch(0.97 0 0)",
+          "secondary-foreground": "oklch(0.205 0 0)",
+          "muted": "oklch(0.97 0 0)",
+          "muted-foreground": "oklch(0.5 0 0)",
+          "accent": "oklch(0.97 0 0)",
+          "accent-foreground": "oklch(0.205 0 0)",
+          "destructive": "oklch(0.577 0.245 27.325)",
+          "border": "oklch(0.922 0 0)",
+          "input": "oklch(0.922 0 0)",
+          "ring": "oklch(0.708 0 0)",
+          "chart-1": "oklch(0.87 0 0)",
+          "chart-2": "oklch(0.556 0 0)",
+          "chart-3": "oklch(0.439 0 0)",
+          "chart-4": "oklch(0.371 0 0)",
+          "chart-5": "oklch(0.269 0 0)",
+          "radius": "0.625rem",
+          "sidebar": "oklch(0.985 0 0)",
+          "sidebar-foreground": "oklch(0.145 0 0)",
+          "sidebar-primary": "oklch(0.205 0 0)",
+          "sidebar-primary-foreground": "oklch(0.985 0 0)",
+          "sidebar-accent": "oklch(0.97 0 0)",
+          "sidebar-accent-foreground": "oklch(0.205 0 0)",
+          "sidebar-border": "oklch(0.922 0 0)",
+          "sidebar-ring": "oklch(0.708 0 0)",
+          "info": "oklch(0.45 0.2 262)",
+          "warning": "oklch(0.5 0.13 60)",
+          "success": "oklch(0.45 0.12 150)"
+        },
+        "dark": {
+          "background": "oklch(0.145 0 0)",
+          "foreground": "oklch(0.985 0 0)",
+          "card": "oklch(0.205 0 0)",
+          "card-foreground": "oklch(0.985 0 0)",
+          "popover": "oklch(0.205 0 0)",
+          "popover-foreground": "oklch(0.985 0 0)",
+          "primary": "oklch(0.922 0 0)",
+          "primary-foreground": "oklch(0.205 0 0)",
+          "secondary": "oklch(0.269 0 0)",
+          "secondary-foreground": "oklch(0.985 0 0)",
+          "muted": "oklch(0.269 0 0)",
+          "muted-foreground": "oklch(0.708 0 0)",
+          "accent": "oklch(0.269 0 0)",
+          "accent-foreground": "oklch(0.985 0 0)",
+          "destructive": "oklch(0.704 0.191 22.216)",
+          "border": "oklch(1 0 0 / 10%)",
+          "input": "oklch(1 0 0 / 15%)",
+          "ring": "oklch(0.556 0 0)",
+          "chart-1": "oklch(0.87 0 0)",
+          "chart-2": "oklch(0.556 0 0)",
+          "chart-3": "oklch(0.439 0 0)",
+          "chart-4": "oklch(0.371 0 0)",
+          "chart-5": "oklch(0.269 0 0)",
+          "sidebar": "oklch(0.205 0 0)",
+          "sidebar-foreground": "oklch(0.985 0 0)",
+          "sidebar-primary": "oklch(0.488 0.243 264.376)",
+          "sidebar-primary-foreground": "oklch(0.985 0 0)",
+          "sidebar-accent": "oklch(0.269 0 0)",
+          "sidebar-accent-foreground": "oklch(0.985 0 0)",
+          "sidebar-border": "oklch(1 0 0 / 10%)",
+          "sidebar-ring": "oklch(0.556 0 0)",
+          "info": "oklch(0.78 0.12 255)",
+          "warning": "oklch(0.82 0.13 85)",
+          "success": "oklch(0.78 0.14 155)"
+        }
+      },
+      "files": []
+    },
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "title": "utils",
+      "description": "cn() — merge Tailwind classes.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/lib/utils.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "i18n",
+      "type": "registry:lib",
+      "title": "i18n",
+      "description": "en + zh-TW messages, plurals, and the design system's own strings.",
+      "files": [
+        {
+          "path": "registry/i18n/i18n.tsx",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/i18n/messages.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "text",
+      "type": "registry:component",
+      "title": "Text",
+      "description": "Text that must choose truncate, clamp or wrap (R4), and Nums (R6).",
+      "registryDependencies": [
+        "@agent-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/patterns/text.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "layout",
+      "type": "registry:component",
+      "title": "Stack and Columns",
+      "description": "Layout whose children can shrink, so columns never overlap (R1).",
+      "registryDependencies": [
+        "@agent-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/patterns/layout.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Bounded, wrapping tooltip; closes on Esc.",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/tooltip.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Buttons whose box never changes (R7); IconButton with a required label; PrimaryScope (R14).",
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@agent-ui/utils",
+        "@agent-ui/tooltip"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "status-badge",
+      "type": "registry:component",
+      "title": "StatusBadge",
+      "description": "Fixed-width status badge across states and languages (R3).",
+      "registryDependencies": [
+        "@agent-ui/utils",
+        "@agent-ui/i18n"
+      ],
+      "files": [
+        {
+          "path": "registry/patterns/status-badge.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "DropdownMenu",
+      "description": "Menu at least as wide as its trigger, equal-width items (R2); closes on Esc and outside click.",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@agent-ui/utils",
+        "@agent-ui/text"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/dropdown-menu.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "Labelled select with equal-width, truncating options (R2).",
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Popover with a labelled × that closes it and returns focus (R15).",
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@agent-ui/utils",
+        "@agent-ui/text",
+        "@agent-ui/button",
+        "@agent-ui/i18n"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/popover.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Dialog that closes by ×, Esc, overlay and Back; guards unsaved text and busy state; fills the screen when narrow (R9, R15).",
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@agent-ui/button",
+        "@agent-ui/text",
+        "@agent-ui/i18n"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/dialog.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "One toast region per app: at most three, closable, identical messages merge with a count, errors stay until closed (R12, R15).",
+      "dependencies": [
+        "sonner"
+      ],
+      "registryDependencies": [
+        "@agent-ui/i18n"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/toast.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "action-bar",
+      "type": "registry:component",
+      "title": "ActionBar",
+      "description": "Wrapping action row, primary first, secondary folds into More actions (R5).",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@agent-ui/button",
+        "@agent-ui/dropdown-menu",
+        "@agent-ui/i18n",
+        "@agent-ui/text"
+      ],
+      "files": [
+        {
+          "path": "registry/patterns/action-bar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "page-header",
+      "type": "registry:component",
+      "title": "PageHeader and Steps",
+      "description": "Page title with required description, and a done/current/todo step list (R14).",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@agent-ui/utils",
+        "@agent-ui/text",
+        "@agent-ui/i18n"
+      ],
+      "files": [
+        {
+          "path": "registry/patterns/page-header.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "api",
+      "type": "registry:lib",
+      "title": "apiFetch and AppError",
+      "description": "One timeout policy and one error shape; users only see a code (R10).",
+      "files": [
+        {
+          "path": "registry/lib/api.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "use-resource",
+      "type": "registry:hook",
+      "title": "useResource",
+      "description": "pending/error/empty/data with loading shown after 200 ms and kept 400 ms (R8).",
+      "registryDependencies": [
+        "@agent-ui/api"
+      ],
+      "files": [
+        {
+          "path": "registry/hooks/use-resource.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "Pulsing placeholder block.",
+      "registryDependencies": [
+        "@agent-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/skeleton.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "states",
+      "type": "registry:component",
+      "title": "Resource, EmptyState, ErrorState",
+      "description": "All four data states without layout shift; friendly errors with a code, and useErrorText for toasts (R8, R10).",
+      "registryDependencies": [
+        "@agent-ui/use-resource",
+        "@agent-ui/i18n",
+        "@agent-ui/text",
+        "@agent-ui/button",
+        "@agent-ui/api"
+      ],
+      "files": [
+        {
+          "path": "registry/patterns/states.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "list",
+      "type": "registry:component",
+      "title": "List",
+      "description": "Show N then 'Show K more', grouping with counts, search, dev warnings for long lists (R13).",
+      "registryDependencies": [
+        "@agent-ui/i18n",
+        "@agent-ui/text",
+        "@agent-ui/button"
+      ],
+      "files": [
+        {
+          "path": "registry/patterns/list.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "data-table",
+      "type": "registry:component",
+      "title": "DataTable",
+      "description": "Real table from 640 px, stacked cards below; same show-more and search rules as List (R6, R11, R13).",
+      "registryDependencies": [
+        "@agent-ui/utils",
+        "@agent-ui/list",
+        "@agent-ui/text",
+        "@agent-ui/i18n"
+      ],
+      "files": [
+        {
+          "path": "registry/patterns/data-table.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "app-shell",
+      "type": "registry:block",
+      "title": "AppShell",
+      "description": "Sticky header with brand, self-scrolling tabs and user menu; mounts toasts and the one-primary-button scope.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@agent-ui/button",
+        "@agent-ui/dropdown-menu",
+        "@agent-ui/toast",
+        "@agent-ui/text",
+        "@agent-ui/i18n",
+        "@agent-ui/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/app-shell.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "eslint",
+      "type": "registry:file",
+      "title": "ESLint rules for apps",
+      "description": "agent-ui/no-raw-layout flags flex/grid/inline-flex/inline-grid (any variant, ! marker) in className strings, cn()/clsx()/cva() arguments and template literals, but does not follow identifiers or constants; agent-ui/no-literal-ui-text requires useT() for JSX text, string children (through ternaries and &&/||) and text props such as title, label, placeholder, aria-label. Add ...agentUi() to eslint.config.js (R1, i18n).",
+      "files": [
+        {
+          "path": "registry/eslint/agent-ui.eslint.js",
+          "type": "registry:file",
+          "target": "components/agent-ui/eslint/agent-ui.eslint.js"
+        }
+      ]
+    },
+    {
+      "name": "testing-rules",
+      "type": "registry:lib",
+      "title": "Playwright layout rules",
+      "description": "overflowing, clippedWithoutTitle, overlappingText, primaries, horizontalScroll, layoutShift for e2e specs.",
+      "devDependencies": [
+        "@playwright/test@1.64.1"
+      ],
+      "files": [
+        {
+          "path": "registry/testing/rules.ts",
+          "type": "registry:lib"
+        }
+      ]
+    }
+  ]
+}

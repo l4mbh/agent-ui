@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "states",
+  "title": "Resource, EmptyState, ErrorState",
+  "description": "All four data states without layout shift; friendly errors with a code, and useErrorText for toasts (R8, R10).",
+  "registryDependencies": [
+    "@agent-ui/use-resource",
+    "@agent-ui/i18n",
+    "@agent-ui/text",
+    "@agent-ui/button",
+    "@agent-ui/api"
+  ],
+  "files": [
+    {
+      "path": "registry/patterns/states.tsx",
+      "content": "import type { ReactNode } from 'react'\nimport type { ResourceState } from '@/registry/hooks/use-resource'\nimport { useHasMessage, useT } from '@/registry/i18n/i18n'\nimport type { AppError } from '@/registry/lib/api'\nimport { Text } from '@/registry/patterns/text'\nimport { Button } from '@/registry/ui/button'\n\n/** R10, R14: an empty area says why it is empty and what to do next. */\nexport function EmptyState({ title, description, action }: { title: string; description: string; action?: ReactNode }) {\n  return (\n    <div className=\"flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-6 text-center\">\n      <Text as=\"p\" overflow=\"wrap\" className=\"text-sm font-medium\">{title}</Text>\n      <Text as=\"p\" overflow=\"wrap\" className=\"max-w-prose text-sm text-muted-foreground\">{description}</Text>\n      {action}\n    </div>\n  )\n}\n\n/**\n * R10: the one error map, shared by ErrorState and toasts: the app's `errors.<CODE>` message (or the\n * generic sentence for any other code) plus the \"Error code …\" line the user quotes back.\n */\nexport function useErrorText(): (error: AppError) => { sentence: string; codeLine: string } {\n  const t = useT()\n  const has = useHasMessage()\n  return (error) => {\n    const key = `errors.${error.code}`\n    return { sentence: has(key) ? t(key) : t('agentui.error.generic'), codeLine: t('agentui.error.code', { code: error.code }) }\n  }\n}\n\n/** R10: a friendly sentence and the code to quote (see useErrorText). */\nexport function ErrorState({ error, onRetry }: { error: AppError; onRetry?: () => void }) {\n  const t = useT()\n  const { sentence, codeLine } = useErrorText()(error)\n  return (\n    <div role=\"alert\" className=\"flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-6 text-center\">\n      <Text as=\"p\" overflow=\"wrap\" className=\"max-w-prose text-sm font-medium\">{sentence}</Text>\n      <Text as=\"p\" overflow=\"wrap\" className=\"text-xs tabular-nums text-muted-foreground\">{codeLine}</Text>\n      {onRetry && <Button onClick={onRetry}>{t('agentui.retry')}</Button>}\n    </div>\n  )\n}\n\n/** R8: every data area handles all four states; before 200 ms the skeleton holds the space invisibly (no shift). */\nexport function Resource<T>({ value, skeleton, empty, children }: {\n  value: ResourceState<T> & { reload: () => void }\n  skeleton: ReactNode\n  empty: ReactNode\n  children: (data: T) => ReactNode\n}) {\n  const t = useT()\n  switch (value.status) {\n    case 'pending':\n      return <div role=\"status\" aria-busy=\"true\" aria-label={t('agentui.loading')} className={value.showLoading ? undefined : 'invisible'}>{skeleton}</div>\n    case 'error':\n      return <ErrorState error={value.error} onRetry={value.reload} />\n    case 'empty':\n      return <>{empty}</>\n    case 'data':\n      return <>{children(value.data)}</>\n  }\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "select",
+  "title": "Select",
+  "description": "Labelled select with equal-width, truncating options (R2).",
+  "dependencies": [
+    "radix-ui",
+    "lucide-react"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/select.tsx",
+      "content": "import { Check, ChevronDown } from 'lucide-react'\nimport { Select as S } from 'radix-ui'\n\nexport type SelectOption = { value: string; label: string }\n\n/** A labelled select whose options are as wide as the trigger and truncate with a title (R2, R4). */\nexport function Select({ label, value, onValueChange, options, placeholder, disabled, 'data-testid': testId }: {\n  label: string\n  value?: string\n  onValueChange: (value: string) => void\n  options: SelectOption[]\n  placeholder?: string\n  disabled?: boolean\n  'data-testid'?: string\n}) {\n  return (\n    <S.Root value={value} onValueChange={onValueChange} disabled={disabled}>\n      <S.Trigger data-testid={testId} aria-label={label} className=\"flex h-9 w-full min-w-0 items-center justify-between gap-2 rounded-md border border-input bg-background px-3 text-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:opacity-50 data-[placeholder]:text-muted-foreground\">\n        <span className=\"min-w-0 truncate\"><S.Value placeholder={placeholder} /></span>\n        <S.Icon asChild><ChevronDown className=\"size-4 shrink-0 opacity-60\" /></S.Icon>\n      </S.Trigger>\n      <S.Portal>\n        <S.Content position=\"popper\" sideOffset={4} collisionPadding={8} className=\"z-50 max-h-(--radix-select-content-available-height) min-w-(--radix-select-trigger-width) max-w-[min(20rem,calc(100vw-1rem))] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md\">\n          <S.Viewport className=\"p-1\">\n            {options.map((o) => (\n              <S.Item key={o.value} value={o.value} className=\"relative block w-full min-w-0 cursor-default select-none rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground\">\n                <S.ItemText><span className=\"block min-w-0 truncate\" title={o.label}>{o.label}</span></S.ItemText>\n                <S.ItemIndicator className=\"absolute right-2 top-1/2 inline-flex -translate-y-1/2\"><Check className=\"size-4\" /></S.ItemIndicator>\n              </S.Item>\n            ))}\n          </S.Viewport>\n        </S.Content>\n      </S.Portal>\n    </S.Root>\n  )\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

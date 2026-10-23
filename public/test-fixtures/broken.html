@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>broken</title>
+<style>
+  body { font: 14px/1.4 system-ui, "PingFang TC", sans-serif; margin: 0; }
+  .row { display: flex; width: 300px; }
+  .row > div { flex: 0 0 50%; min-width: 0; white-space: nowrap; }
+</style></head>
+<body>
+  <!-- R1: two columns, text spills from the first into the second -->
+  <div class="row" id="cols"><div>客戶 A 報價討論（內湖辦公室，第二次會議）</div><div>Quarterly business review with Client A</div></div>
+  <!-- R4: clipped with an ellipsis but no title -->
+  <div id="clip" style="width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">工單〈官網改版排程〉提到要找 Mei 討論</div>
+  <!-- R6: a long e-mail spills out of its box -->
+  <div style="width:150px"><span id="mail" style="display:block;white-space:nowrap">someone.with.a.very.long.alias@example.com</span></div>
+  <!-- R2: menu items of different widths -->
+  <ul id="menu" style="display:inline-flex;flex-direction:column;align-items:flex-start;padding:0">
+    <li style="display:block">Wait 2 hours</li><li style="display:block">Cancel meeting entirely</li>
+  </ul>
+  <!-- badge on top of a label: parent/child overlap -->
+  <button style="position:relative;width:80px">Save changes<span style="position:absolute;left:10px;top:0">99+</span></button>
+  <!-- line clamp without a title -->
+  <p id="clamp" style="width:120px;margin:0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden">Clamped paragraph that keeps going for far more than two lines of text in a narrow box</p>
+  <!-- fixed box pushed off the right edge -->
+  <div style="position:fixed;right:-50px;top:300px;width:400px">Promo banner</div>
+  <!-- R14: two visible primary buttons in one view (a hidden one and one in a dialog do not count) -->
+  <button data-variant="primary">Send invite</button><button data-variant="primary">Save draft</button>
+  <button data-variant="primary" hidden>Hidden primary</button>
+  <div role="dialog" aria-label="Edit meeting"><button data-variant="primary">Save</button><button data-variant="primary">Save and close</button></div>
+  <!-- R11: page wider than any viewport -->
+  <div style="width:2400px">wide</div>
+</body></html>

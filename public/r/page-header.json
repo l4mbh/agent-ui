@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page-header",
+  "title": "PageHeader and Steps",
+  "description": "Page title with required description, and a done/current/todo step list (R14).",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "@agent-ui/utils",
+    "@agent-ui/text",
+    "@agent-ui/i18n"
+  ],
+  "files": [
+    {
+      "path": "registry/patterns/page-header.tsx",
+      "content": "import { Check } from 'lucide-react'\nimport type { ReactNode } from 'react'\nimport { useT } from '@/registry/i18n/i18n'\nimport { cn } from '@/registry/lib/utils'\nimport { Text } from '@/registry/patterns/text'\n\n/** R14: `description` is required — one sentence saying what this page is for or what it is waiting on. */\nexport function PageHeader({ title, description, actions }: { title: string; description: string; actions?: ReactNode }) {\n  return (\n    <header className=\"flex flex-col gap-3 pb-4 sm:flex-row sm:items-start sm:justify-between\">\n      <div className=\"min-w-0\">\n        <Text as=\"h1\" overflow={{ clamp: 2 }} className=\"text-xl font-semibold tracking-tight\">{title}</Text>\n        <Text as=\"p\" overflow=\"wrap\" className=\"mt-1 text-sm text-muted-foreground\">{description}</Text>\n      </div>\n      {/* Fixed half-width column, not content-sized: ActionBar folds by its own width, so a shrink-to-fit parent would fold short (CJK) labels needlessly. */}\n      {actions && <div className=\"min-w-0 sm:w-1/2 sm:shrink-0\">{actions}</div>}\n    </header>\n  )\n}\n\nexport type Step = { label: string; detail?: string; state: 'done' | 'current' | 'todo' }\n\n/** R14: where a multi-step flow is — done, now, next. */\nexport function Steps({ steps }: { steps: Step[] }) {\n  const t = useT()\n  return (\n    <ol className=\"grid gap-2\">\n      {steps.map((s, i) => (\n        <li key={i} aria-current={s.state === 'current' ? 'step' : undefined} className=\"flex items-start gap-2 text-sm\">\n          <span className={cn('mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full text-xs font-medium tabular-nums',\n            s.state === 'done' && 'bg-success text-white dark:text-background', s.state === 'current' && 'bg-primary text-primary-foreground', s.state === 'todo' && 'bg-muted text-muted-foreground')}>\n            {s.state === 'done' ? <Check className=\"size-3\" aria-hidden /> : i + 1}\n          </span>\n          <div className=\"min-w-0\">\n            <span className=\"sr-only\">{t(`agentui.step.${s.state}`)}</span>\n            <Text overflow=\"wrap\" className={cn('block font-medium', s.state === 'todo' && 'text-muted-foreground')}>{s.label}</Text>\n            {s.detail && <Text overflow=\"wrap\" className=\"block text-muted-foreground\">{s.detail}</Text>}\n          </div>\n        </li>\n      ))}\n    </ol>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

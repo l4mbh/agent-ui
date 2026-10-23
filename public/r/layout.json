@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "layout",
+  "title": "Stack and Columns",
+  "description": "Layout whose children can shrink, so columns never overlap (R1).",
+  "registryDependencies": [
+    "@agent-ui/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/patterns/layout.tsx",
+      "content": "import type { CSSProperties, HTMLAttributes, ReactNode } from 'react'\nimport { cn } from '@/registry/lib/utils'\n\nconst gaps = { 0: 'gap-0', 1: 'gap-1', 2: 'gap-2', 3: 'gap-3', 4: 'gap-4', 6: 'gap-6', 8: 'gap-8' } as const\nconst aligns = { start: 'items-start', center: 'items-center', end: 'items-end', stretch: 'items-stretch' } as const\nconst justifies = { start: 'justify-start', center: 'justify-center', end: 'justify-end', between: 'justify-between' } as const\ntype Gap = keyof typeof gaps\ntype Rest = Omit<HTMLAttributes<HTMLElement>, 'children' | 'className'>\n\n// R1: `*:min-w-0` lets every child shrink below its content width — the one rule that stops columns overlapping.\nexport function Stack({ direction = 'column', gap = 3, align, justify, wrap = false, as: As = 'div', className, children, ...rest }: Rest & {\n  direction?: 'column' | 'row'\n  gap?: Gap\n  align?: keyof typeof aligns\n  justify?: keyof typeof justifies\n  wrap?: boolean\n  as?: 'div' | 'ul' | 'ol' | 'section'\n  className?: string\n  children: ReactNode\n}) {\n  return (\n    <As {...rest} className={cn('flex *:min-w-0', direction === 'row' ? 'flex-row' : 'flex-col', gaps[gap], align && aligns[align], justify && justifies[justify], wrap && 'flex-wrap', className)}>\n      {children}\n    </As>\n  )\n}\n\n/** A grid whose tracks are `template` (e.g. \"minmax(0,1fr) auto\"); one column below 640 px by default. */\nexport function Columns({ template, gap = 4, collapseBelowSm = true, className, children, style, ...rest }: Rest & {\n  template: string\n  gap?: Gap\n  collapseBelowSm?: boolean\n  className?: string\n  children: ReactNode\n}) {\n  return (\n    <div\n      {...rest}\n      style={{ ...style, '--agent-ui-cols': template } as CSSProperties}\n      className={cn('grid *:min-w-0', gaps[gap], collapseBelowSm ? 'sm:[grid-template-columns:var(--agent-ui-cols)]' : '[grid-template-columns:var(--agent-ui-cols)]', className)}\n    >\n      {children}\n    </div>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

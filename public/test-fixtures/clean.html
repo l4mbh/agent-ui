@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>clean</title>
+<style>
+  body { font: 14px/1.25 system-ui, "PingFang TC", sans-serif; margin: 0; }
+  .row { display: flex; width: 300px; gap: 8px; }
+  .row > div { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dense { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 320px; }
+  .dense p { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+</style></head>
+<body>
+  <div class="row"><div title="客戶 A 報價討論（內湖辦公室，第二次會議）">客戶 A 報價討論（內湖辦公室，第二次會議）</div><div title="Quarterly business review with Client A">Quarterly business review with Client A</div></div>
+  <div style="width:150px;overflow-wrap:anywhere">someone.with.a.very.long.alias@example.com</div>
+  <ul id="menu" style="display:inline-flex;flex-direction:column;align-items:stretch;padding:0;min-width:180px">
+    <li style="display:block">Wait 2 hours</li><li style="display:block">Cancel meeting entirely</li>
+  </ul>
+  <!-- tight line-height, two columns side by side: must not be reported as overlap -->
+  <div class="dense">
+    <p>下週一下午兩點到三點，在內湖辦公室和客戶 A 討論第二次報價，需要帶上次的會議紀錄。</p>
+    <p>Bring the notes from the first meeting; the client asked for a revised quote by Friday afternoon.</p>
+  </div>
+  <!-- different elements stacked with tight leading: must not be reported as overlap -->
+  <div style="line-height:1;width:200px"><div>客戶 A 季度業務檢討</div><div>第二次會議・內湖辦公室</div></div>
+  <div style="line-height:1;width:200px"><div>Quarterly business review</div><div>Second meeting, Neihu office</div></div>
+  <!-- nested inline text -->
+  <p style="width:300px;margin:0">Plain text with <b>bold part</b> and <i>italic part</i> inside one paragraph.</p>
+  <!-- clamp with a title -->
+  <p title="Clamped paragraph that keeps going for far more than two lines of text in a narrow box" style="width:120px;margin:0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden">Clamped paragraph that keeps going for far more than two lines of text in a narrow box</p>
+  <!-- opted-out wrapper with a spilling child -->
+  <div data-allow-overflow style="width:100px"><span style="display:block;white-space:nowrap">This child spills out of its wrapper on purpose</span></div>
+  <!-- R14: one primary outside dialogs, one inside a dialog, a hidden one and a secondary one -->
+  <button data-variant="primary">Send invite</button><button data-variant="secondary">Cancel</button>
+  <button data-variant="primary" style="visibility:hidden">Hidden primary</button>
+  <div role="dialog" aria-label="Edit meeting"><button data-variant="primary">Save</button></div>
+</body></html>
