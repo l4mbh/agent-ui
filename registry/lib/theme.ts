@@ -32,10 +32,12 @@ function apply(theme: Theme) {
 
 /** Call before the first render: the saved choice, else the OS preference, which it follows until the user picks. */
 export function initTheme(): Theme {
-  const os = matchMedia('(prefers-color-scheme: dark)')
-  picked = load()
-  apply(picked ?? (os.matches ? 'dark' : 'light'))
-  if (!watching) {
+  // No matchMedia (jsdom, non-browser render): start light rather than throw.
+  const os = typeof matchMedia === 'function' ? matchMedia('(prefers-color-scheme: dark)') : null
+  // A second call (HMR, an app calling it twice) keeps an unsaved pick when storage is blocked.
+  picked = load() ?? picked
+  apply(picked ?? (os?.matches ? 'dark' : 'light'))
+  if (os && !watching) {
     watching = true
     os.addEventListener('change', (e) => { if (!picked) apply(e.matches ? 'dark' : 'light') })
   }

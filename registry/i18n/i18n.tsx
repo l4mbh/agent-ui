@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useMemo, type ReactNode } from 'react'
 import { dsMessages } from '@/registry/i18n/messages'
 
 export const LOCALES = ['en', 'zh-TW'] as const
@@ -35,6 +35,8 @@ export function I18nProvider({ locale, messages, children }: { locale: Locale; m
     }),
     [locale, messages],
   )
+  // Screen readers pick their voice from <html lang> (WCAG 3.1.1), so it follows every locale change.
+  useEffect(() => { document.documentElement.lang = locale }, [locale])
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>
 }
 

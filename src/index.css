@@ -9,4 +9,7 @@
 @layer base {
   * { @apply border-border outline-ring/50; }
   body { @apply bg-background text-foreground font-sans antialiased; }
+  /* Native scrollbars, date/time inputs and selects follow the theme. Mirrors the `base` item's css in registry.json. */
+  :root { color-scheme: light; }
+  .dark { color-scheme: dark; }
 }

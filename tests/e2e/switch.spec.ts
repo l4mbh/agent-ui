@@ -72,8 +72,11 @@ test('theme switch flips html.dark, works by keyboard, and the pick survives a r
   const start = await isDark(page) // the project's colorScheme
   const sw = page.getByRole('banner').getByRole('switch', { name: 'Dark mode' })
   await expect(sw).toHaveAttribute('aria-checked', String(start))
+  const scheme = () => page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)
+  expect(await scheme()).toBe(start ? 'dark' : 'light') // native scrollbars, date inputs and selects follow
   await sw.click()
   expect(await isDark(page)).toBe(!start)
+  expect(await scheme()).toBe(start ? 'light' : 'dark')
   await expect(sw).toHaveAttribute('aria-checked', String(!start))
   await page.reload()
   await page.getByTestId('stress-ready').waitFor({ state: 'attached' })
@@ -99,19 +102,18 @@ test('an open toast follows a theme switch', async ({ page }) => {
   await ready(page, '/stress')
   await page.getByTestId('toast-error').click()
   const toaster = page.locator('[data-sonner-toaster]')
-  const theme = async () => toaster.getAttribute('data-sonner-theme')
   const start = (await isDark(page)) ? 'dark' : 'light'
   await expect(toaster).toHaveAttribute('data-sonner-theme', start)
   await page.getByRole('banner').getByRole('switch', { name: 'Dark mode' }).click()
   await expect(toaster).toHaveAttribute('data-sonner-theme', start === 'dark' ? 'light' : 'dark')
   await expect(page.locator('[data-sonner-toast]')).toBeVisible()
-  expect(await theme()).not.toBe(start)
 })
 
 for (const locale of ['en', 'zh-TW'] as const) {
   test(`locale switch — labelled, keyboard-operable, names each language in itself (${locale})`, async ({ page }) => {
     await ready(page, `/stress?locale=${locale}`)
     const other = locale === 'en' ? 'zh-TW' : 'en'
+    await expect(page.locator('html')).toHaveAttribute('lang', locale) // set by I18nProvider, not by the page
     const trigger = page.getByRole('banner').getByRole('button', { name: words[locale].language })
     await expect(trigger).toHaveCount(1)
     await trigger.focus()

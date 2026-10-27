@@ -61,6 +61,15 @@ it('never throws when storage is blocked, and still keeps the pick for this page
   expect(isDark()).toBe(false)
   os(true)
   expect(isDark()).toBe(false)
+  initTheme() // a second call (HMR) must not forget the unsaved pick
+  os(true)
+  expect(isDark()).toBe(false)
+})
+
+it('starts light without matchMedia instead of throwing', async () => {
+  vi.stubGlobal('matchMedia', undefined)
+  const { initTheme } = await load()
+  expect(initTheme()).toBe('light')
 })
 
 it('useTheme re-renders on setTheme and on a class toggled by the app itself', async () => {

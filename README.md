@@ -24,7 +24,8 @@ and `npm test` measures them at 360 / 768 / 1280 / 1920 px in light and dark.
 // main.tsx: the theme before the first render (saved pick, else the OS, followed until the user picks).
 // A fresh Vite template wraps <App> in its own ThemeProvider: remove it, initTheme() replaces it.
 initTheme()
-// AppShell, and every component that shows text, throws outside <I18nProvider>. The app owns the locale.
+// AppShell, and every component that shows text, throws outside <I18nProvider>. The app owns the locale;
+// I18nProvider keeps <html lang> on it.
 function Root() {
   const [locale, setLocale] = useState<Locale>('en') // or the user's saved language
   return <I18nProvider locale={locale} messages={messages}><App onLocaleChange={setLocale} /></I18nProvider>
@@ -44,7 +45,8 @@ export function App({ onLocaleChange }: { onLocaleChange: (l: Locale) => void })
 ```
 - Theme (`@agent-ui/theme`): `initTheme()` once before rendering, `setTheme('dark' | 'light')` for a pick (saved in
   `localStorage['agent-ui.theme']`), `useTheme()` to read it. The `dark` class on `<html>` is the source of truth, so
-  toasts follow any change live. Blocked storage never throws; the pick then lasts for the page only.
+  toasts follow any change live. Blocked storage never throws; the pick then lasts for the page only. The `base` item
+  sets CSS `color-scheme` (`light` on `:root`, `dark` on `.dark`), so native scrollbars, date inputs and selects follow.
 - Header `actions` (`ThemeSwitch`, `LocaleSwitch`, or your own controls) sit before the user menu. From 640 px the header
   is one row: brand, tabs (scroll inside themselves), actions, user menu. Below 640 px it becomes two rows: brand,
   actions and user menu on the first (the user name truncates first), the tabs alone on the second at full width.

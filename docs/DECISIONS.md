@@ -48,8 +48,14 @@ Built `public/r` (24 items + `registry.json`; consecutive builds are byte-identi
 - `LocaleSwitch` is an icon button with a radio menu, not a `Select`: 36 px wide in the header at 360 px, the trigger's
   width does not depend on the language, and items are named in their own language (`lang` set on each).
 - `AppShell` `actions`: below 640 px the header wraps to two rows (brand · actions · user menu, then the tabs at full
-  width); the `max-sm:` classes are added only when `actions` is passed. Checked: without `actions` the rendered markup
-  equals v0.1.0's byte for byte (1758 bytes, jsdom, both components rendered with the same props; with `actions` it differs).
+  width); the `max-sm:` classes are added only when `actions` is passed. Pinned: `tests/unit/app-shell.test.tsx` compares
+  the header rendered without `actions` with `tests/unit/fixtures/app-shell-header-v0.1.0.html` (the v0.1.0 component
+  rendered with the same props), and /stress?actions=0 runs the original header layout checks at every width.
+- `I18nProvider` sets `<html lang>` on every locale change (WCAG 3.1.1), so an app switching locale at runtime needs no
+  effect of its own.
+- `color-scheme` (`light` / `dark`) lives in the `base` item's `css` (and `src/index.css` for the stress page), not in
+  `theme.css`: `sync-base.mjs` copies only custom properties.
+- `initTheme()` without `matchMedia` starts light instead of throwing; a second call keeps an unsaved pick.
 - Install proof (local server, `npx http-server public -p 4174 -c-1`): fresh `shadcn@4.22.1 init -t vite -b radix -p nova`
   app, `add @agent-ui/base @agent-ui/app-shell @agent-ui/theme-switch @agent-ui/locale-switch --overwrite -y`, wired as in
   README; `tsc -b` and `vite build` pass; in Chrome the switch sets `html.dark`, survives a reload, and the language

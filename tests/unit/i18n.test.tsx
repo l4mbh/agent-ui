@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react'
+import { render, renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { describe, expect, it } from 'vitest'
 import { format, I18nProvider, LOCALES, useTAll } from '@/registry/i18n/i18n'
@@ -43,4 +43,12 @@ it('useTAll returns the message in every locale', () => {
   const wrapper = ({ children }: { children: ReactNode }) => <I18nProvider locale="en" messages={{ en: {}, 'zh-TW': {} }}>{children}</I18nProvider>
   const { result } = renderHook(() => useTAll(), { wrapper })
   expect(result.current('agentui.close')).toEqual(['Close', '關閉'])
+})
+
+it('I18nProvider keeps <html lang> on the current locale', () => {
+  const view = (locale: 'en' | 'zh-TW') => <I18nProvider locale={locale} messages={{ en: {}, 'zh-TW': {} }}><p /></I18nProvider>
+  const { rerender } = render(view('en'))
+  expect(document.documentElement.lang).toBe('en')
+  rerender(view('zh-TW'))
+  expect(document.documentElement.lang).toBe('zh-TW')
 })

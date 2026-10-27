@@ -8,6 +8,8 @@ import { Stress } from '@/stress/Stress'
 const items = ['base', 'utils', 'i18n', 'text', 'layout', 'tooltip', 'button', 'status-badge', 'dropdown-menu', 'select', 'popover', 'action-bar', 'page-header', 'dialog', 'api', 'use-resource', 'skeleton', 'states', 'list', 'data-table', 'toast', 'switch', 'theme', 'theme-switch', 'locale-switch', 'app-shell', 'eslint', 'testing-rules']
 
 const docs = 'https://github.com/l4mbh/agent-ui/blob/main/docs'
+// ?actions=0: the header as an app that passes no `actions` (v0.1.0 wiring) renders it.
+const withActions = new URLSearchParams(location.search).get('actions') !== '0'
 
 export function App({ onLocaleChange }: { onLocaleChange: (locale: Locale) => void }) {
   const t = useT()
@@ -17,7 +19,7 @@ export function App({ onLocaleChange }: { onLocaleChange: (locale: Locale) => vo
     // Four tabs, a count, both switches and a long user name: the header's worst case (R1, R5).
     <AppShell brand="agent-ui" nav={[{ href: '/', label: t('stress.nav.index'), current: !stress }, { href: '/stress', label: t('stress.title'), current: stress },
       { href: `${docs}/RULES.md`, label: t('stress.nav.rules'), count: 15 }, { href: `${docs}/DECISIONS.md`, label: t('stress.nav.decisions') }]}
-      actions={<><ThemeSwitch /><LocaleSwitch value={locale} onChange={onLocaleChange} /></>}
+      actions={withActions ? <><ThemeSwitch /><LocaleSwitch value={locale} onChange={onLocaleChange} /></> : undefined}
       user={{ name: 'someone.with.a.very.long.alias@example.com', menu: [{ id: 'out', label: t('stress.nav.signOut'), onSelect: () => {} }] }}>
       {stress ? <Stress /> : (
         <>

@@ -28,6 +28,12 @@
           },
           "body": {
             "@apply bg-background text-foreground font-sans antialiased": {}
+          },
+          ":root": {
+            "color-scheme": "light"
+          },
+          ".dark": {
+            "color-scheme": "dark"
           }
         }
       },

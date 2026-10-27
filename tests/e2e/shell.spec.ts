@@ -1,8 +1,10 @@
 import { expect, test, type Locator } from '@playwright/test'
 import { clippedWithoutTitle, horizontalScroll, overflowing, overlappingText, settle } from '../../registry/testing/rules'
 
-test('AppShell — header fits, user name truncates, no sideways scroll', async ({ page }) => {
-  await page.goto('/stress')
+// ?actions=0 is the header of an app on the v0.1.0 wiring (no `actions`); its markup is pinned in tests/unit/app-shell.test.tsx.
+test('AppShell without actions — header fits, user name truncates, no sideways scroll', async ({ page }) => {
+  await page.goto('/stress?actions=0')
+  await expect(page.getByRole('banner').getByRole('switch')).toHaveCount(0)
   await page.getByTestId('stress-ready').waitFor({ state: 'attached' })
   expect(await overflowing(page, 'header')).toEqual([])
   expect(await horizontalScroll(page)).toBe(false)
