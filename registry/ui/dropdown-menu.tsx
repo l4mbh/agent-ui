@@ -1,3 +1,4 @@
+import { Check } from 'lucide-react'
 import { DropdownMenu as M } from 'radix-ui'
 import type { ComponentProps } from 'react'
 import { cn } from '@/registry/lib/utils'
@@ -21,14 +22,28 @@ export function DropdownMenuContent({ className, align = 'start', ...props }: Co
   )
 }
 
+const item = 'flex w-full min-w-0 cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled]:opacity-50 data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground'
+
 export function DropdownMenuItem({ className, destructive = false, children, ...props }: ComponentProps<typeof M.Item> & { destructive?: boolean }) {
   return (
     <M.Item
-      className={cn('flex w-full min-w-0 cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled]:opacity-50 data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground', destructive && 'text-destructive data-[highlighted]:text-destructive', className)}
+      className={cn(item, destructive && 'text-destructive data-[highlighted]:text-destructive', className)}
       {...props}
     >
       {typeof children === 'string' ? <Text overflow="truncate">{children}</Text> : children}
     </M.Item>
+  )
+}
+
+export const DropdownMenuRadioGroup = M.RadioGroup
+
+/** One choice of a DropdownMenuRadioGroup; the chosen one carries a check (aria-checked for screen readers). */
+export function DropdownMenuRadioItem({ className, children, ...props }: ComponentProps<typeof M.RadioItem>) {
+  return (
+    <M.RadioItem className={cn(item, 'relative pr-8', className)} {...props}>
+      {typeof children === 'string' ? <Text overflow="truncate">{children}</Text> : children}
+      <M.ItemIndicator className="absolute right-2 top-1/2 inline-flex -translate-y-1/2"><Check className="size-4" /></M.ItemIndicator>
+    </M.RadioItem>
   )
 }
 

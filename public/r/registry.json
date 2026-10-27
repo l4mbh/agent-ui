@@ -270,9 +270,10 @@
       "name": "dropdown-menu",
       "type": "registry:ui",
       "title": "DropdownMenu",
-      "description": "Menu at least as wide as its trigger, equal-width items (R2); closes on Esc and outside click.",
+      "description": "Menu at least as wide as its trigger, equal-width items and radio items (R2); closes on Esc and outside click.",
       "dependencies": [
-        "radix-ui"
+        "radix-ui",
+        "lucide-react"
       ],
       "registryDependencies": [
         "@agent-ui/utils",
@@ -345,15 +346,88 @@
       ]
     },
     {
+      "name": "theme",
+      "type": "registry:lib",
+      "title": "initTheme, setTheme, useTheme",
+      "description": "Light/dark on <html class=dark>: the saved pick, else the OS preference (followed until the user picks); storage access never throws.",
+      "files": [
+        {
+          "path": "registry/lib/theme.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "Radix switch with a required label (visible, or aria-label + tooltip); same box in every state (R7, R14).",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@agent-ui/utils",
+        "@agent-ui/text",
+        "@agent-ui/tooltip"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/switch.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "theme-switch",
+      "type": "registry:block",
+      "title": "ThemeSwitch",
+      "description": "Dark-mode switch with a sun/moon thumb for the AppShell header; saves the pick.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@agent-ui/switch",
+        "@agent-ui/theme",
+        "@agent-ui/i18n"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/theme-switch.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "locale-switch",
+      "type": "registry:component",
+      "title": "LocaleSwitch",
+      "description": "Controlled English / 繁體中文 menu for the AppShell header; each language named in itself.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@agent-ui/button",
+        "@agent-ui/dropdown-menu",
+        "@agent-ui/i18n"
+      ],
+      "files": [
+        {
+          "path": "registry/patterns/locale-switch.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "toast",
       "type": "registry:ui",
       "title": "Toast",
-      "description": "One toast region per app: at most three, closable, identical messages merge with a count, errors stay until closed (R12, R15).",
+      "description": "One toast region per app: at most three, closable, identical messages merge with a count, errors stay until closed, follows the light/dark theme live (R12, R15).",
       "dependencies": [
         "sonner"
       ],
       "registryDependencies": [
-        "@agent-ui/i18n"
+        "@agent-ui/i18n",
+        "@agent-ui/theme"
       ],
       "files": [
         {
@@ -503,7 +577,7 @@
       "name": "app-shell",
       "type": "registry:block",
       "title": "AppShell",
-      "description": "Sticky header with brand, self-scrolling tabs and user menu; mounts toasts and the one-primary-button scope.",
+      "description": "Sticky header with brand, self-scrolling tabs, optional actions (theme, language) and user menu; mounts toasts and the one-primary-button scope.",
       "dependencies": [
         "lucide-react"
       ],

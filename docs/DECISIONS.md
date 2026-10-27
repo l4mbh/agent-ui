@@ -33,3 +33,25 @@ Built `public/r` (24 items + `registry.json`; consecutive builds are byte-identi
 - Re-adding over existing files needs `--overwrite -y`.
 - ESLint 10: `eslint-plugin-react@7.37.5` (latest) peers ESLint <= 9, so a fresh Vite app (ESLint 10) failed with ERESOLVE. Fixed at the source: `react/jsx-no-literals` was replaced by the in-house `agent-ui/no-literal-ui-text`; the `eslint` item has no devDependencies and `legacy-peer-deps` is not needed. Verified manually (not part of `npm test`): in a fresh consumer on ESLint 10, `eslint .` is clean on vendored files and reports both rules on a file with `<div className="flex">Hi</div>`; with `ignores: []` it reports 43 findings in the vendored files (positive control).
 - `python3 -m http.server` resets connections (ECONNRESET) under shadcn's parallel fetches; use `npx http-server public -p 4174 -c-1` for the local check.
+
+## v0.2.0: theme, switches, header actions (2026-10-27)
+- Theme state lives in the `dark` class on `<html>`; `useTheme()` watches it with a MutationObserver. One source of truth,
+  and apps still on the v0.1.0 wiring (toggling the class themselves) get live toasts too. Two states only, no
+  "system" option: the OS preference is followed until the first pick, after which the pick wins (kept in memory
+  as well, so blocked storage does not let the OS undo a pick on the same page). No cross-tab sync.
+- `Switch` styles its track by `aria-checked`, not `data-state`: wrapped in our `Tooltip` (hidden-label mode), the
+  tooltip trigger's `data-state` (`closed` / `delayed-open`) overwrites the switch's. Measured: the header switch had
+  `data-state="closed"` and a transparent track until the change.
+- Unchecked track is `--muted-foreground`, not shadcn's `--input`, for non-text contrast (WCAG 1.4.11, which axe does
+  not check). Thumb vs track, computed as luminance = L³ for the achromatic oklch tokens: shadcn's light unchecked
+  1.26:1; ours light unchecked 6.0:1, dark unchecked 7.6:1, checked 17.9:1 light / 15.7:1 dark.
+- `LocaleSwitch` is an icon button with a radio menu, not a `Select`: 36 px wide in the header at 360 px, the trigger's
+  width does not depend on the language, and items are named in their own language (`lang` set on each).
+- `AppShell` `actions`: below 640 px the header wraps to two rows (brand · actions · user menu, then the tabs at full
+  width); the `max-sm:` classes are added only when `actions` is passed. Checked: without `actions` the rendered markup
+  equals v0.1.0's byte for byte (1758 bytes, jsdom, both components rendered with the same props; with `actions` it differs).
+- Install proof (local server, `npx http-server public -p 4174 -c-1`): fresh `shadcn@4.22.1 init -t vite -b radix -p nova`
+  app, `add @agent-ui/base @agent-ui/app-shell @agent-ui/theme-switch @agent-ui/locale-switch --overwrite -y`, wired as in
+  README; `tsc -b` and `vite build` pass; in Chrome the switch sets `html.dark`, survives a reload, and the language
+  menu switches the copy. Note: the current Vite template ships its own `ThemeProvider` in `main.tsx`; replace it with
+  `initTheme()`.

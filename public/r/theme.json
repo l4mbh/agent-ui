@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme",
+  "title": "initTheme, setTheme, useTheme",
+  "description": "Light/dark on <html class=dark>: the saved pick, else the OS preference (followed until the user picks); storage access never throws.",
+  "files": [
+    {
+      "path": "registry/lib/theme.ts",
+      "content": "import { useSyncExternalStore } from 'react'\n\nexport type Theme = 'light' | 'dark'\n\nconst KEY = 'agent-ui.theme'\n// Set once the user picks (or a saved pick is found): from then on the OS preference no longer moves the theme,\n// also when storage is blocked and the pick cannot be saved.\nlet picked: Theme | null = null\nlet watching = false\n\n// Storage throws in some private modes and with blocked site data; the theme then lasts for this page only.\nfunction load(): Theme | null {\n  try {\n    const v = localStorage.getItem(KEY)\n    return v === 'light' || v === 'dark' ? v : null\n  } catch {\n    return null\n  }\n}\n\nfunction save(theme: Theme) {\n  try {\n    localStorage.setItem(KEY, theme)\n  } catch {\n    // See load().\n  }\n}\n\nfunction apply(theme: Theme) {\n  document.documentElement.classList.toggle('dark', theme === 'dark')\n}\n\n/** Call before the first render: the saved choice, else the OS preference, which it follows until the user picks. */\nexport function initTheme(): Theme {\n  const os = matchMedia('(prefers-color-scheme: dark)')\n  picked = load()\n  apply(picked ?? (os.matches ? 'dark' : 'light'))\n  if (!watching) {\n    watching = true\n    os.addEventListener('change', (e) => { if (!picked) apply(e.matches ? 'dark' : 'light') })\n  }\n  return getTheme()\n}\n\n/** The user's pick: applied at once and saved for the next visit. */\nexport function setTheme(theme: Theme) {\n  picked = theme\n  save(theme)\n  apply(theme)\n}\n\n// The `dark` class on <html> is the one source of truth, so an app that toggles it itself is followed too.\nexport function getTheme(): Theme {\n  return document.documentElement.classList.contains('dark') ? 'dark' : 'light'\n}\n\nfunction subscribe(onChange: () => void) {\n  const observer = new MutationObserver(onChange)\n  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })\n  return () => observer.disconnect()\n}\n\n/** The current theme; re-renders when it changes. */\nexport function useTheme(): Theme {\n  return useSyncExternalStore(subscribe, getTheme)\n}\n",
+      "type": "registry:lib"
+    }
+  ],
+  "type": "registry:lib"
+}

@@ -21,6 +21,11 @@ export const dsMessages: Catalogs = {
     'agentui.search': 'Search',
     'agentui.noResults': 'No matches',
     'agentui.nav.main': 'Main',
+    'agentui.theme.dark': 'Dark mode',
+    'agentui.locale.label': 'Language',
+    // Each language is named in itself, so the same in every catalog.
+    'agentui.locale.en': 'English',
+    'agentui.locale.zh-TW': '繁體中文',
   },
   'zh-TW': {
     'agentui.close': '關閉',
@@ -40,5 +45,9 @@ export const dsMessages: Catalogs = {
     'agentui.search': '搜尋',
     'agentui.noResults': '沒有符合的結果',
     'agentui.nav.main': '主選單',
+    'agentui.theme.dark': '深色模式',
+    'agentui.locale.label': '語言',
+    'agentui.locale.en': 'English',
+    'agentui.locale.zh-TW': '繁體中文',
   },
 }

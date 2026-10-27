@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme-switch",
+  "title": "ThemeSwitch",
+  "description": "Dark-mode switch with a sun/moon thumb for the AppShell header; saves the pick.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "@agent-ui/switch",
+    "@agent-ui/theme",
+    "@agent-ui/i18n"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/theme-switch.tsx",
+      "content": "import { Moon, Sun } from 'lucide-react'\nimport { useT } from '@/registry/i18n/i18n'\nimport { setTheme, useTheme } from '@/registry/lib/theme'\nimport { Switch } from '@/registry/ui/switch'\n\n/** Light/dark switch for the AppShell header; the pick is saved. Call initTheme() in main.tsx. */\nexport function ThemeSwitch() {\n  const t = useT()\n  const dark = useTheme() === 'dark'\n  return (\n    <Switch label={t('agentui.theme.dark')} hideLabel checked={dark} onCheckedChange={(on) => setTheme(on ? 'dark' : 'light')}\n      icon={dark ? <Moon aria-hidden /> : <Sun aria-hidden />} />\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:block"
+}

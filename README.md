@@ -9,7 +9,7 @@ and `npm test` measures them at 360 / 768 / 1280 / 1920 px in light and dark.
 2. `components.json`: add the registry and point every alias at one vendored folder, so the lint rules can skip it:
    ```json
    "aliases": { "components": "@/components/agent-ui", "ui": "@/components/agent-ui/ui", "lib": "@/components/agent-ui/lib", "utils": "@/components/agent-ui/lib/utils", "hooks": "@/components/agent-ui/hooks" },
-   "registries": { "@agent-ui": "https://raw.githubusercontent.com/l4mbh/agent-ui/v0.1.0/public/r/{name}.json" }
+   "registries": { "@agent-ui": "https://raw.githubusercontent.com/l4mbh/agent-ui/v0.2.0/public/r/{name}.json" }
    ```
    The repo is public, so no token is needed. Pin the tag in the URL; bump it to upgrade.
 3. `npx shadcn add @agent-ui/base @agent-ui/app-shell … --overwrite -y`. `--overwrite` is needed when the app already has a file an item installs (init creates `src/lib/utils.ts`; with the aliases above ours goes to `src/components/agent-ui/lib/utils.ts`).
@@ -17,17 +17,39 @@ and `npm test` measures them at 360 / 768 / 1280 / 1920 px in light and dark.
 
 ### Wire it
 ```tsx
-// main.tsx: set the theme class before the first render; the Toaster reads it once.
-document.documentElement.classList.toggle('dark', matchMedia('(prefers-color-scheme: dark)').matches)
-// AppShell, and every component that shows text, throws outside <I18nProvider>.
-createRoot(document.getElementById('root')!).render(<I18nProvider locale="en" messages={messages}><App /></I18nProvider>)
+// Imports with the aliases above:
+// '@/components/agent-ui/app-shell', '@/components/agent-ui/theme-switch', '@/components/agent-ui/locale-switch',
+// '@/components/agent-ui/lib/i18n' (I18nProvider, useT, useLocale, Locale), '@/components/agent-ui/lib/theme' (initTheme)
+
+// main.tsx: the theme before the first render (saved pick, else the OS, followed until the user picks).
+// A fresh Vite template wraps <App> in its own ThemeProvider: remove it, initTheme() replaces it.
+initTheme()
+// AppShell, and every component that shows text, throws outside <I18nProvider>. The app owns the locale.
+function Root() {
+  const [locale, setLocale] = useState<Locale>('en') // or the user's saved language
+  return <I18nProvider locale={locale} messages={messages}><App onLocaleChange={setLocale} /></I18nProvider>
+}
+createRoot(document.getElementById('root')!).render(<Root />)
 
 // App.tsx
-export function App() {
+export function App({ onLocaleChange }: { onLocaleChange: (l: Locale) => void }) {
   const t = useT()
-  return <AppShell brand="Acme" nav={[{ href: '/', label: t('nav.home'), current: true }]}><Home /></AppShell>
+  return (
+    <AppShell brand="Acme" nav={[{ href: '/', label: t('nav.home'), current: true }]}
+      actions={<><ThemeSwitch /><LocaleSwitch value={useLocale()} onChange={onLocaleChange} /></>}>
+      <Home />
+    </AppShell>
+  )
 }
 ```
+- Theme (`@agent-ui/theme`): `initTheme()` once before rendering, `setTheme('dark' | 'light')` for a pick (saved in
+  `localStorage['agent-ui.theme']`), `useTheme()` to read it. The `dark` class on `<html>` is the source of truth, so
+  toasts follow any change live. Blocked storage never throws; the pick then lasts for the page only.
+- Header `actions` (`ThemeSwitch`, `LocaleSwitch`, or your own controls) sit before the user menu. From 640 px the header
+  is one row: brand, tabs (scroll inside themselves), actions, user menu. Below 640 px it becomes two rows: brand,
+  actions and user menu on the first (the user name truncates first), the tabs alone on the second at full width.
+  Without `actions` the header is exactly v0.1.0's. Keep the brand short: it and the actions never shrink.
+- `LocaleSwitch` is controlled: `onChange` gets the new locale only when it differs; save it where your app keeps it.
 - `messages` is `{ en: {...}, 'zh-TW': {...} }` with flat keys (`meetings.title`, plurals `x.one` / `x.other`) and one
   `errors.<CODE>` sentence per server code (`{error:{code}}`, `^[A-Z][A-Z0-9_]{0,63}$`, anything else becomes
   `BAD_RESPONSE`); a code without a sentence shows the generic one, always with the code.

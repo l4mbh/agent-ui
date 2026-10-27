@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "switch",
+  "title": "Switch",
+  "description": "Radix switch with a required label (visible, or aria-label + tooltip); same box in every state (R7, R14).",
+  "dependencies": [
+    "radix-ui"
+  ],
+  "registryDependencies": [
+    "@agent-ui/utils",
+    "@agent-ui/text",
+    "@agent-ui/tooltip"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/switch.tsx",
+      "content": "import { Switch as S } from 'radix-ui'\nimport { useId, type ComponentProps, type ReactNode } from 'react'\nimport { cn } from '@/registry/lib/utils'\nimport { Text } from '@/registry/patterns/text'\nimport { Tooltip } from '@/registry/ui/tooltip'\n\nexport type SwitchProps = Omit<ComponentProps<typeof S.Root>, 'children'> & {\n  /** Always required: shown next to the switch, or with `hideLabel` its accessible name and tooltip (R14). */\n  label: string\n  hideLabel?: boolean\n  /** Drawn inside the thumb, e.g. a sun or a moon. */\n  icon?: ReactNode\n}\n\n// R7: states change colour, thumb position and the focus ring (a shadow) only, so the box never moves.\n// The track is styled by aria-checked, not data-state: a Tooltip trigger overwrites the root's data-state.\nexport function Switch({ label, hideLabel = false, icon, id, className, ...props }: SwitchProps) {\n  const autoId = useId()\n  const root = (\n    <S.Root\n      id={id ?? autoId}\n      aria-label={hideLabel ? label : undefined}\n      className={cn('peer inline-flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 outline-none transition-[background-color,box-shadow] focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 bg-muted-foreground aria-checked:bg-primary', className)}\n      {...props}\n    >\n      <S.Thumb className=\"pointer-events-none flex size-4 items-center justify-center rounded-full bg-background text-foreground shadow-sm transition-transform data-[state=checked]:translate-x-4 [&_svg]:size-3\">\n        {icon}\n      </S.Thumb>\n    </S.Root>\n  )\n  if (hideLabel) return <Tooltip content={label} wrapTrigger={props.disabled}>{root}</Tooltip>\n  return (\n    <span className=\"inline-flex min-w-0 max-w-full items-center gap-2\">\n      {root}\n      <label htmlFor={id ?? autoId} className=\"flex min-w-0 text-sm peer-disabled:opacity-50\">\n        <Text overflow=\"truncate\">{label}</Text>\n      </label>\n    </span>\n  )\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

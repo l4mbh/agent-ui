@@ -1,15 +1,17 @@
 import { toast, Toaster } from 'sonner'
 import { useT } from '@/registry/i18n/i18n'
+import { useTheme } from '@/registry/lib/theme'
 
 const bottom = 'calc(var(--agent-ui-sticky-bottom, 0px) + 16px)'
 
 /** R12: one region per app, at most three, above any sticky bottom bar (set --agent-ui-sticky-bottom on :root). */
 export function ToastRegion() {
   const t = useT()
+  const theme = useTheme()
   // mobileOffset is separate in sonner (<= 600px), so both get the lift. Sonner's mobile list is width:100% starting 16px in, which
   // pokes 16px past the right edge; the class narrows it and the toasts fill it (width:100%) so they stay inside the viewport.
   return <Toaster className="max-[600px]:w-[calc(100%-32px)]!" visibleToasts={3} closeButton position="bottom-right" offset={{ bottom }} mobileOffset={{ bottom }}
-    theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'} toastOptions={{ style: { width: '100%' }, closeButtonAriaLabel: t('agentui.close') }} />
+    theme={theme} toastOptions={{ style: { width: '100%' }, closeButtonAriaLabel: t('agentui.close') }} />
 }
 
 type Kind = 'info' | 'success' | 'error'

@@ -9,10 +9,13 @@ import { ToastRegion } from '@/registry/ui/toast'
 
 export type NavItem = { href: string; label: string; count?: number; current?: boolean }
 
-export function AppShell({ brand, nav, user, onNavigate, children }: {
+export function AppShell({ brand, nav, user, actions, onNavigate, children }: {
   brand: ReactNode
   nav: NavItem[]
   user?: { name: string; menu: { id: string; label: string; onSelect: () => void }[] }
+  /** Header controls before the user menu (e.g. ThemeSwitch, LocaleSwitch). Below 640 px the tabs then move to a
+   *  second row, so the controls never squeeze the tabs to nothing. */
+  actions?: ReactNode
   onNavigate?: (href: string) => void
   children: ReactNode
 }) {
@@ -25,11 +28,12 @@ export function AppShell({ brand, nav, user, onNavigate, children }: {
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4">
+        {/* Without `actions` the header renders exactly as in v0.1.0; the max-sm: classes apply only with them. */}
+        <div className={cn('mx-auto flex h-14 max-w-6xl items-center gap-4 px-4', actions && 'max-sm:h-auto max-sm:flex-wrap max-sm:gap-x-2 max-sm:gap-y-0')}>
           <div className="flex shrink-0 items-center gap-2 font-semibold">{brand}</div>
           {/* The tab row scrolls inside itself on narrow screens; the page never scrolls sideways (R11).
               Only this subtree is exempt from overflow checks: brand and user menu stay measured. */}
-          <nav aria-label={t('agentui.nav.main')} className="min-w-0 flex-1 overflow-x-auto" data-allow-overflow>
+          <nav aria-label={t('agentui.nav.main')} className={cn('min-w-0 flex-1 overflow-x-auto', actions && 'max-sm:order-last max-sm:basis-full max-sm:pb-2')} data-allow-overflow>
             <ul className="flex w-max gap-1">
               {nav.map((n) => (
                 <li key={n.href}>
@@ -42,9 +46,10 @@ export function AppShell({ brand, nav, user, onNavigate, children }: {
               ))}
             </ul>
           </nav>
+          {actions && <div className="flex h-14 shrink-0 items-center gap-1 max-sm:ml-auto">{actions}</div>}
           {user && (
             <DropdownMenu>
-              <DropdownMenuTrigger className="inline-flex h-9 min-w-0 max-w-40 shrink-0 items-center gap-1 rounded-md px-2 text-sm hover:bg-accent">
+              <DropdownMenuTrigger className={cn('inline-flex h-9 min-w-0 max-w-40 shrink-0 items-center gap-1 rounded-md px-2 text-sm hover:bg-accent', actions && 'max-sm:shrink')}>
                 <Text overflow="truncate">{user.name}</Text><ChevronDown className="size-4 shrink-0" aria-hidden />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

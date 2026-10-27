@@ -6,6 +6,7 @@ import { MenusSection } from '@/stress/sections/menus'
 import { ListsSection } from '@/stress/sections/lists'
 import { PageSection } from '@/stress/sections/page'
 import { ResourceSection } from '@/stress/sections/resource'
+import { SwitchesSection } from '@/stress/sections/switches'
 import { TextLayoutSection } from '@/stress/sections/text-layout'
 import { ToastsSection } from '@/stress/sections/toasts'
 
@@ -15,6 +16,7 @@ export type Section = { id: string; title: string; Component: () => JSX.Element 
 export const sections: Section[] = [
   { id: 'text-layout', title: 'Text & layout (R1, R4, R6)', Component: TextLayoutSection },
   { id: 'buttons', title: 'Buttons (R7, R14)', Component: ButtonsSection },
+  { id: 'switches', title: 'Switch (R4, R7, R14)', Component: SwitchesSection },
   { id: 'badges', title: 'Status badges (R3)', Component: BadgesSection },
   { id: 'menus', title: 'Menus, select, popover (R2, R15)', Component: MenusSection },
   { id: 'page', title: 'Page header, action bar, steps (R5, R14)', Component: PageSection },

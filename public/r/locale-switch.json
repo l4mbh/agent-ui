@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "locale-switch",
+  "title": "LocaleSwitch",
+  "description": "Controlled English / 繁體中文 menu for the AppShell header; each language named in itself.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "@agent-ui/button",
+    "@agent-ui/dropdown-menu",
+    "@agent-ui/i18n"
+  ],
+  "files": [
+    {
+      "path": "registry/patterns/locale-switch.tsx",
+      "content": "import { Languages } from 'lucide-react'\nimport { LOCALES, useT, type Locale } from '@/registry/i18n/i18n'\nimport { IconButton } from '@/registry/ui/button'\nimport { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '@/registry/ui/dropdown-menu'\n\n/** Language menu for the AppShell header. Controlled: the app owns the locale and saves it. Each language is named in itself. */\nexport function LocaleSwitch({ value, onChange }: { value: Locale; onChange: (locale: Locale) => void }) {\n  const t = useT()\n  return (\n    <DropdownMenu>\n      <DropdownMenuTrigger asChild>\n        <IconButton label={t('agentui.locale.label')} variant=\"ghost\"><Languages /></IconButton>\n      </DropdownMenuTrigger>\n      <DropdownMenuContent align=\"end\">\n        {/* Picking the current language again is not a change (an app may save on change). */}\n        <DropdownMenuRadioGroup value={value} onValueChange={(v) => { if (v !== value) onChange(v as Locale) }}>\n          {LOCALES.map((l) => <DropdownMenuRadioItem key={l} value={l} lang={l}>{t(`agentui.locale.${l}`)}</DropdownMenuRadioItem>)}\n        </DropdownMenuRadioGroup>\n      </DropdownMenuContent>\n    </DropdownMenu>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}
